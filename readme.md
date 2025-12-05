@@ -3,9 +3,9 @@
 
 ## Información del Estudiante
 
-- **Nombre:** [Tu nombre completo aquí]
-- **Carrera:** [Tu carrera]
-- **Fecha de inicio:** [Fecha]
+- **Nombre:** Jordi Sánchez Fernández
+- **Carrera:** Ingenieria en Software
+- **Fecha de inicio:** 4 de diciembre de 2025
 
 ---
 
