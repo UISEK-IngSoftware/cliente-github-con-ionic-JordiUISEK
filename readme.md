@@ -5,7 +5,7 @@
 
 - **Nombre:** Jordi Sánchez Fernández
 - **Carrera:** Ingenieria en Software
-- **Fecha de inicio:** 4 de diciembre de 2025
+- **Fecha de inicio:** 11 de diciembre de 2025
 
 ---
 
