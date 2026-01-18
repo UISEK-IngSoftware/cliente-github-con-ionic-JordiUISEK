@@ -32,7 +32,12 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
             },
         });
 
-        const reposData: RepositoryItem[] = response.data.map((repo: any) => ({
+        const reposData: RepositoryItem[] = response.data.map((repo: {
+            name: string;
+            description: string | null;
+            owner?: { avatar_url?: string; login?: string };
+            language: string | null;
+        }) => ({
             name: repo.name,
             description: repo.description || null,
             imageUrl: repo.owner?.avatar_url || null,
@@ -47,23 +52,63 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
     }
 };
 
-export const createRepository = async (repository: RepositoryItem): Promise<RepositoryItem> => {
+export const createRepository = async (repository: RepositoryItem): Promise<RepositoryItem | null> => {
     try {
-        const response = await axios.post(`/user/repos`, repository);
+        const payload = {
+            name: repository.name,
+            description: repository.description || '',
+            private: false,
+            auto_init: false
+        };
+        const response = await githubApi.post(`/user/repos`, payload);
         console.log("Repositorio creado: ", response.data);
-        return response.data;
+        return {
+            name: response.data.name,
+            description: response.data.description || null,
+            imageUrl: response.data.owner?.avatar_url || null,
+            owner: response.data.owner?.login || null,
+            language: response.data.language || null,
+        };
     } catch (error) {
         console.error("Error al crear el repositorio", error);
-        return null;
+        throw error;
     }
 };
 
-export const getUserInfo = async (): Promise<UserInfo> => {
+export const getUserInfo = async (): Promise<UserInfo | null> => {
     try {
         const response = await githubApi.get(`/user`);
         return response.data;
     } catch (error) {
         console.error("Error al obtener la información del usuario: ", error);
+        return null;
+    }
+};
+
+export const deleteRepository = async (owner: string, repoName: string): Promise<boolean> => {
+    try {
+        await githubApi.delete(`/repos/${owner}/${repoName}`);
+        console.log("Repositorio eliminado: ", repoName);
+        return true;
+    } catch (error) {
+        console.error("Error al eliminar el repositorio", error);
+        return false;
+    }
+};
+
+export const updateRepository = async (owner: string, repoName: string, updates: Partial<RepositoryItem>): Promise<RepositoryItem | null> => {
+    try {
+        const response = await githubApi.patch(`/repos/${owner}/${repoName}`, updates);
+        console.log("Repositorio actualizado: ", response.data);
+        return {
+            name: response.data.name,
+            description: response.data.description || null,
+            imageUrl: response.data.owner?.avatar_url || null,
+            owner: response.data.owner?.login || null,
+            language: response.data.language || null,
+        };
+    } catch (error) {
+        console.error("Error al actualizar el repositorio", error);
         return null;
     }
 };

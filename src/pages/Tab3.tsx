@@ -60,11 +60,11 @@ const Tab3: React.FC = () => {
           </IonCardHeader>
 
           <IonCardContent>{userInfo.bio}</IonCardContent>
-        </IonCard>
 
-        <IonButton expand="block" color="danger" onClick={handleLogout}>
-          Cerrar sesión
-        </IonButton>
+          <IonButton expand="block" color="danger" onClick={handleLogout}>
+            Cerrar sesión
+          </IonButton>
+        </IonCard>
       </IonContent>
     </IonPage>
   );

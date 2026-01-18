@@ -1,3 +1,4 @@
+import React from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { IonInput, IonItem, IonList, IonTextarea, IonButton } from '@ionic/react';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
@@ -8,20 +9,20 @@ import './Tab2.css';
 const Tab2: React.FC = () => {
 
   const history = useHistory();
-  const repoFormData : RepositoryItem = {
+  const [repoFormData, setRepoFormData] = React.useState<RepositoryItem>({
     name: '',
     description: '',
     imageUrl: null,
     owner: null,
     language: null,
-  };
+  });
 
   const setRepoName = (value: string) => {
-    repoFormData.name = value;
+    setRepoFormData({ ...repoFormData, name: value });
   }
 
   const setRepoDescription = (value: string) => {
-    repoFormData.description = value;
+    setRepoFormData({ ...repoFormData, description: value });
   }
 
   const saveRepo = () => {
@@ -32,6 +33,10 @@ const Tab2: React.FC = () => {
     }
 
     createRepository(repoFormData).then(() => {
+      setRepoFormData({
+        name: '',
+        description: ''
+      });
       history.push('/repositorios');
     }).catch((error) => {
       console.log('Error al crear el repositorio: ', error);
@@ -56,12 +61,29 @@ const Tab2: React.FC = () => {
         <div className="form-container">
           <IonList>
             <IonItem>
-              <IonInput label="Nombre del repositorio" labelPlacement="floating" placeholder="" className="form-field" value={repoFormData.name} onIonChange={(e) => setRepoName(e.detail.value!)}></IonInput>
+              <IonInput 
+                label="Nombre del repositorio" 
+                labelPlacement="floating" 
+                placeholder="" 
+                className="form-field" 
+                value={repoFormData.name} 
+                onIonInput={(e) => setRepoName(e.detail.value!)}
+                required
+              ></IonInput>
             </IonItem>
             <IonItem>
-              <IonTextarea label="Descripción del repositorio" rows={6} counter={true} maxlength={200} labelPlacement="floating" className="form-field" value={repoFormData.description} onIonChange={(e) => setRepoDescription(e.detail.value!)}></IonTextarea>
+              <IonTextarea 
+                label="Descripción del repositorio" 
+                rows={6} 
+                counter={true} 
+                maxlength={200} 
+                labelPlacement="floating" 
+                className="form-field" 
+                value={repoFormData.description} 
+                onIonInput={(e) => setRepoDescription(e.detail.value!)}
+              ></IonTextarea>
             </IonItem>
-            <IonButton onClick={saveRepo}>Guardar</IonButton>
+            <IonButton onClick={saveRepo} expand="block">Guardar</IonButton>
           </IonList>
         </div>
 
