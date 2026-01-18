@@ -45,43 +45,60 @@ import '@ionic/react/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 
+/* Login */
+import AuthService from "./services/AuthService";
+import Login from "./pages/Login";
+
+
 setupIonicReact();
 
-const App: React.FC = () => (
+const App: React.FC = () => {
+  const isAuthenticated = AuthService.isAuthenticated();
+
+  return (
   <IonApp>
     <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/repositorios">
-            <Tab1 />
-          </Route>
-          <Route exact path="/nuevo-repo">
-            <Tab2 />
-          </Route>
-          <Route path="/perfil">
-            <Tab3 />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/repositorios" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="repositorios" href="/repositorios">
-            <IonIcon aria-hidden="true" icon={codeSlashOutline} />
-            <IonLabel>Repositorios</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="nuevo-repo" href="/nuevo-repo">
-            <IonIcon aria-hidden="true" icon={addCircleOutline} />
-            <IonLabel>Nuevo repositorio</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="perfil" href="/perfil">
-            <IonIcon aria-hidden="true" icon={personCircleOutline} />
-            <IonLabel>Perfil</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
+      <IonRouterOutlet>
+        <Route exact path="/login">
+          <Login />
+        </Route>
+        <Route>
+          {isAuthenticated ? (
+            <IonTabs>
+              <IonRouterOutlet>
+                <Route exact path="/repositorios">
+                  <Tab1 />
+                </Route>
+                <Route exact path="/nuevo-repo">
+                  <Tab2 />
+                </Route>
+                <Route path="/perfil">
+                  <Tab3 />
+                </Route>
+                <Route exact path="/">
+                  <Redirect to="/repositorios" />
+                </Route>
+              </IonRouterOutlet>
+              <IonTabBar slot="bottom">
+                <IonTabButton tab="repositorios" href="/repositorios">
+                  <IonIcon aria-hidden="true" icon={codeSlashOutline} />
+                  <IonLabel>Repositorios</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="nuevo-repo" href="/nuevo-repo">
+                  <IonIcon aria-hidden="true" icon={addCircleOutline} />
+                  <IonLabel>Nuevo repositorio</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="perfil" href="/perfil">
+                  <IonIcon aria-hidden="true" icon={personCircleOutline} />
+                  <IonLabel>Perfil</IonLabel>
+                </IonTabButton>
+              </IonTabBar>
+            </IonTabs>
+            ) : (<Redirect to="/login" />)}
+        </Route>
+      </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
-);
+)};
 
 export default App;
