@@ -5,10 +5,12 @@ import { UserInfo } from '../interfaces/UserInfo';
 import { getUserInfo } from '../services/GithubService';
 import AuthService from '../services/AuthService';
 import { useHistory } from 'react-router-dom';
+import LoadingSpinner from '../components/LoadingSpinner';
 import './Tab3.css';
 
 const Tab3: React.FC = () => {
 
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const [userInfo, setUserInfo] = useState<UserInfo>({
@@ -21,6 +23,7 @@ const Tab3: React.FC = () => {
   });
 
   const loadUserInfo = async () => {
+    setLoading(true);
     const response = await getUserInfo();
     setUserInfo({
       login: response.login,
@@ -28,6 +31,7 @@ const Tab3: React.FC = () => {
       avatar_url: response.avatar_url,
       bio: response.bio,
     });
+    setLoading(false);
   };
 
   const handleLogout = () => {
@@ -66,6 +70,7 @@ const Tab3: React.FC = () => {
           </IonButton>
         </IonCard>
       </IonContent>
+      <LoadingSpinner isOpen={loading} />
     </IonPage>
   );
 };

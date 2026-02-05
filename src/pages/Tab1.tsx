@@ -5,16 +5,19 @@ import RepoItem from '../components/RepoItem';
 import './Tab1.css';
 import { RepositoryItem } from '../interfaces/RepositoryItem';
 import { fetchRepositories, deleteRepository, updateRepository } from '../services/GithubService';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Tab1: React.FC = () => {
 
   const [repos, setRepos] = React.useState<RepositoryItem[]>([]);
   const [presentAlert] = useIonAlert();
   const slidingRefs = React.useRef<{ [key: number]: HTMLIonItemSlidingElement | null }>({});
-
+  const [loading, setLoading] = React.useState(false);
   const loadRepos = async () => {
+    setLoading(true);
     const reposData = await fetchRepositories();
     setRepos(reposData);
+    setLoading(false);
   };
 
   const handleDelete = async (repo: RepositoryItem, index: number) => {
@@ -170,6 +173,7 @@ const Tab1: React.FC = () => {
             </IonItemSliding>
           ))}
         </IonList>
+        <LoadingSpinner isOpen={loading} />
       </IonContent>
     </IonPage>
   );
